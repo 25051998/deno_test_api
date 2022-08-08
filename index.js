@@ -33,6 +33,17 @@ router
     .get("/book", (context) => {
         context.response.body = Array.from(books.values());
     })
+    .post("/hooks", async (context) => {
+        let messageRecieved = "Success"
+        let messageFromHook = await context.request.body().value;
+        if (messageFromHook) {
+            messages.concat(JSON.stringify(messageFromHook));
+            context.response.body = messageRecieved;
+        }
+        else{
+            context.response.body = "Request was empty";
+        }
+    })
     .get("/book/:id", (context) => {
         if (books.has(context?.params?.id)) {
             context.response.body = books.get(context.params.id);
